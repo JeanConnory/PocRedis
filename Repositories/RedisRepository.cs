@@ -33,9 +33,9 @@ namespace PocRedis.Repositories
         }
 
         public async Task SetCollection<T>(string collectionKey, IEnumerable<T> collection)
-        { 
+        {
             var jsonData = JsonConvert.SerializeObject(collection);
-            await _distributedCache.SetStringAsync(collectionKey.ToLower(), jsonData);         
+            await _distributedCache.SetStringAsync(collectionKey.ToLower(), jsonData);
         }
 
         public async Task SetValue<T>(Guid id, T obj)
@@ -43,6 +43,11 @@ namespace PocRedis.Repositories
             var key = id.ToString().ToLower();
             var newValue = JsonConvert.SerializeObject(obj);
             await _distributedCache.SetStringAsync(key, newValue);
+            //await _distributedCache.SetStringAsync(key, newValue, new DistributedCacheEntryOptions
+            //{
+            //    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
+            //    SlidingExpiration = TimeSpan.FromMinutes(20)
+            //}); Com expiração de 20 minutos se ninguem acessar e 1h de qq forma
         }
     }
 }
